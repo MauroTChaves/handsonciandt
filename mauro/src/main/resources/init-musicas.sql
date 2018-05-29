@@ -1,0 +1,10 @@
+INSERT INTO public.musicas(id, nome, artista_id)VALUES(1, 'La Belle Beajour', 1);
+INSERT INTO public.musicas(id, nome, artista_id)VALUES(2, 'Forró Amargo', 1);
+INSERT INTO public.musicas(id, nome, artista_id)VALUES(3, 'Paizinho', 2);
+INSERT INTO public.musicas(id, nome, artista_id)VALUES(4, 'Meteoro da Paixão', 2);
+INSERT INTO public.musicas(id, nome, artista_id)VALUES(5, 'Apelido Carinhoso', 2);
+INSERT INTO public.musicas(id, nome, artista_id)VALUES(6, 'Forró Amargo', 3);
+INSERT INTO public.musicas(id, nome, artista_id)VALUES(7, 'Agua da minha sede', 4);
+INSERT INTO public.musicas(id, nome, artista_id)VALUES(8, 'Bumbum', 5);
+INSERT INTO public.musicas(id, nome, artista_id)VALUES(9, 'Remexe', 5);
+INSERT INTO public.musicas(id, nome, artista_id)VALUES(10, 'Balança', 5);
