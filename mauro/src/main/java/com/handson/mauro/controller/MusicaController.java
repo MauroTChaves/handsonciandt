@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.handson.mauro.entity.Musica;
+import com.handson.mauro.repository.ArtistaRepository;
 import com.handson.mauro.repository.MusicasRepository;
 
 /**
@@ -30,6 +31,8 @@ import com.handson.mauro.repository.MusicasRepository;
 public class MusicaController {
 	
 	private MusicasRepository repository;
+	
+	private ArtistaRepository artistaRepository;
 	
 	public MusicaController(MusicasRepository repository) {
 		this.repository = repository;
@@ -92,6 +95,16 @@ public class MusicaController {
 			return ResponseEntity.notFound().build();
 		}
 
+	}
+	
+	/**
+	 * Retorna todos as musicas cadastradas na database
+	 * 
+	 * @return lista de Musicas
+	 */
+	@GetMapping("filtro/{nomeMusica}")
+	public Iterable<Musica> buscaMusicasUsandoFiltro(@PathVariable String nomeMusica) {
+			return this.repository.findByNomeLikeIgnoreCase(nomeMusica);	
 	}
 	
 	

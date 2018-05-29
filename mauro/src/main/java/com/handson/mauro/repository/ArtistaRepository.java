@@ -12,5 +12,5 @@ import com.handson.mauro.entity.Artista;
  */
 @Repository
 public interface ArtistaRepository extends JpaRepository<Artista, Long> {
-
+	Long findByNomeLikeIgnoreCase(String nome);
 }
