@@ -1,6 +1,7 @@
 package com.handson.mauro.controller;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,15 +32,15 @@ import com.handson.mauro.repository.MusicasRepository;
 @RestController
 @RequestMapping("api/musicas")
 public class MusicaController {
-	
+
 	private MusicasRepository repository;
-	
+
 	private ArtistaRepository artistaRepository;
-	
+
 	public MusicaController(MusicasRepository repository) {
 		this.repository = repository;
 	}
-	
+
 	/**
 	 * Retorna todos as musicas cadastradas na database
 	 * 
@@ -47,8 +50,7 @@ public class MusicaController {
 	public Iterable<Musica> getAll() {
 		return this.repository.findAll();
 	}
-	
-	
+
 	/**
 	 * Método que retorna uma musica pssando com parametro o id
 	 * 
@@ -61,8 +63,7 @@ public class MusicaController {
 		Optional<Musica> byId = this.repository.findById(id);
 		return orElseReturn(byId, id);
 	}
-	
-	
+
 	/**
 	 * Método que salvar uma musica e por boas praticas retorna o status 200 qnd
 	 * sucesso e 401 qnd erro.
@@ -75,7 +76,7 @@ public class MusicaController {
 	public void create(@RequestBody @Valid Musica musica) {
 		this.repository.save(musica);
 	}
-	
+
 	/**
 	 * Método que exclui uma musica da database
 	 * 
@@ -96,18 +97,7 @@ public class MusicaController {
 		}
 
 	}
-	
-	/**
-	 * Retorna todos as musicas cadastradas na database
-	 * 
-	 * @return lista de Musicas
-	 */
-	@GetMapping("filtro/{nomeMusica}")
-	public Iterable<Musica> buscaMusicasUsandoFiltro(@PathVariable String nomeMusica) {
-			return this.repository.findByNomeLikeIgnoreCase(nomeMusica);	
-	}
-	
-	
+
 	/**
 	 * Método auxiliar para retornar status ok ou not found
 	 * 
@@ -124,6 +114,31 @@ public class MusicaController {
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Musica não encontrada");
 		}
+	}
+	
+	/**
+	 * Retorna todos as musicas cadastradas na database
+	 * 
+	 * @return lista de Musicas
+	 */
+	@GetMapping("filtro/{nomeMusica}")
+	public @ResponseBody ResponseEntity buscaMusicasUsandoFiltro1(@PathVariable String nomeMusica) {
+		try{
+			
+			if(nomeMusica.length() < 3) {
+				return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Favor digitar mais que 3 caracteres");
+			}
+			
+			List<Musica> musicas = repository.findByNomeLikeIgnoreCase(nomeMusica);
+			if(musicas.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Musica não encontrada");
+			}
+			
+			return ResponseEntity.ok().body(musicas);
+		}catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
+
 	}
 
 }
